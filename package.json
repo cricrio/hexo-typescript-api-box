@@ -1,0 +1,24 @@
+{
+  "name": "hexo-typescript-api-box",
+  "version": "0.5.0",
+  "description": "An typescript API box for hexo projects",
+  "main": "typescript-api-box.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apollostack/hexo-typescript-api-box.git"
+  },
+  "author": "Tom Coleman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meteor/hexo-typescript-api-box/issues"
+  },
+  "homepage": "https://github.com/meteor/hexo-typescript-api-box#readme",
+  "dependencies": {
+    "handlebars": "^4.0.5",
+    "lodash": "^4.13.1",
+    "showdown": "^1.4.2"
+  }
+}

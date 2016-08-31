@@ -34,7 +34,6 @@ function traverse(tree, parentName) {
 }
 traverse(allData);
 
-console.log('here')
 hexo.extend.tag.register('tsapibox', function(args) {
   var name = args.shift();
   var options = parseTagOptions(args)
@@ -94,6 +93,7 @@ function templateArgs(rawData) {
     name: rawData.name,
     type: type,
     signature: _signature(rawData, parameters),
+    summary: _summary(rawData),
     groups: groups,
     repo: 'apollostack/apollo-client',
     filepath: rawData.sources[0].fileName,
@@ -115,6 +115,13 @@ function _signature(rawData, parameters) {
   return escapedName;
 }
 
+function _summary(rawData) {
+  if (rawData.comment) {
+    return rawData.comment.shortText;
+  }
+  return rawData.signatures && rawData.signatures[0].comment
+    && rawData.signatures[0].comment.shortText;
+}
 
 // Takes the data about a function / constructor and parses out the named params
 function _parameters(rawData) {
@@ -155,7 +162,7 @@ function _parameter(parameter) {
   return {
     name: parameter.name,
     type: _type(parameter),
-    description: parameter.comment && parameter.comment.text
+    description: parameter.comment && (parameter.comment.text|| parameter.comment.shortText),
   };
 }
 

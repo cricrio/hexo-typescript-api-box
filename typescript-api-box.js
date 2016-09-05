@@ -109,7 +109,17 @@ function _signature(rawData, parameters) {
   // if it is a function, and therefore has arguments
   if (_.includes(['Function', 'Constructor', 'Method'], rawData.kindString)) {
     var signature = rawData.signatures && rawData.signatures[0];
-    return signature.name + _parameterString(_.map(parameters, 'name'));
+    var name = _.escape(signature.name);
+    var parameterString = _parameterString(_.map(parameters, 'name'));
+    var returnType = '';
+    if (rawData.kindString !== 'Constructor') {
+      var type = _type(signature, true);
+      if (type !== 'void') {
+        returnType = ': ' + _type(signature, true);
+      }
+    }
+
+    return signature.name + parameterString + returnType;
   }
 
   return escapedName;
@@ -217,7 +227,7 @@ function _type(data, skipSignature) {
 
   var typeName = _typeName(type);
   if (!typeName) {
-    console.error("unknown type name for ", data.name);
+    console.error("unknown type name for", data.name);
     // console.trace();
     typeName = 'XXXX: unknown';
   }

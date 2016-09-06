@@ -260,7 +260,7 @@ function _typeName(type) {
       }
 
     }
-    return '<a href="#' + _typeId(type) + '">' + type.name + '</a>';
+    return _link(_typeId(type));
   } else if (type.type === 'stringLiteral') {
     return '"' + type.value + '"';
   }
@@ -279,7 +279,18 @@ function getFirst(data, kindString) {
   return _.find(data.children, { kindString: kindString });
 }
 
+function _link(id) {
+  return '<a href="#' + id + '">' + id + '</a>';
+}
+
 handlebars.registerHelper('markdown', function(text) {
+  if (text) {
+    // replace {@link Foo} with <a href="#Foo">Foo</a>
+    text = text.replace(/\{@link (\w*)\}/g, function(m, part) {
+      return _link(part);
+    });
+  }
+
   return converter.makeHtml(text);
 });
 

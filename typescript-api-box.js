@@ -107,12 +107,17 @@ function templateArgs(rawData) {
 // XXX: not sure whether to use the 'kind' enum from TS or just run with the
 // strings. Strings seem safe enough I guess
 function _signature(rawData, parameters) {
+  var dataForSignature = rawData;
+  if (_isReflectedProperty(rawData)) {
+    dataForSignature = rawData.type.declaration;
+  }
+
   var escapedName = _.escape(rawData.name);
 
   // if it is a function, and therefore has arguments
-  if (_.includes(['Function', 'Constructor', 'Method'], rawData.kindString)) {
-    var signature = rawData.signatures && rawData.signatures[0];
-    var name = _.escape(signature.name);
+  var signature = dataForSignature.signatures && dataForSignature.signatures[0];
+  if (signature) {
+    var name = rawData.name;
     var parameterString = _parameterString(_.map(parameters, 'name'));
     var returnType = '';
     if (rawData.kindString !== 'Constructor') {
@@ -122,7 +127,7 @@ function _signature(rawData, parameters) {
       }
     }
 
-    return signature.name + parameterString + returnType;
+    return name + parameterString + returnType;
   }
 
   return escapedName;
@@ -138,6 +143,10 @@ function _summary(rawData) {
 
 // Takes the data about a function / constructor and parses out the named params
 function _parameters(rawData) {
+  if (_isReflectedProperty(rawData)) {
+    return _parameters(rawData.type.declaration);
+  }
+
   var signature = rawData.signatures && rawData.signatures[0];
   if (!signature) {
     return [];
@@ -169,6 +178,10 @@ function _parameters(rawData) {
       properties: properties
     });
   });
+}
+
+function _isReflectedProperty(data) {
+  return data.kindString === 'Property' && data.type && data.type.type === 'reflection';
 }
 
 function _parameter(parameter) {

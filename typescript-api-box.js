@@ -25,6 +25,9 @@ function traverse(tree, parentName) {
   var name = tree.name;
   if (_.includes(['Constructor', 'Method', 'Property'], tree.kindString)) {
     name = parentName + '.' + tree.name
+    // add the parentName to the data so we can reference it for ids
+    tree.parentName = parentName;
+    tree.fullName = name;
   }
   dataByKey[name] = tree;
 
@@ -260,14 +263,14 @@ function _typeName(type) {
       }
 
     }
-    return _link(_typeId(type));
+    return _link(_typeId(type), type.name);
   } else if (type.type === 'stringLiteral') {
     return '"' + type.value + '"';
   }
 }
 
 function _typeId(type) {
-  return type.name;
+  return type.fullName || type.name;
 }
 
 function isReadableName(name) {
@@ -279,8 +282,11 @@ function getFirst(data, kindString) {
   return _.find(data.children, { kindString: kindString });
 }
 
-function _link(id) {
-  return '<a href="#' + id + '">' + id + '</a>';
+function _link(id, name) {
+  if (!name) {
+    name = id;
+  }
+  return '<a href="#' + id + '">' + name + '</a>';
 }
 
 handlebars.registerHelper('markdown', function(text) {

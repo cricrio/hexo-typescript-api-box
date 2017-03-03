@@ -262,7 +262,20 @@ function _typeName(type) {
     }
     return type.name;
   } else if (type.type === 'union') {
-    return _.map(type.types, _typeName).join(' | ');
+    var typeNames = [];
+    for (let i = 0; i < type.types.length; i++) {
+      // Try to get the type name for this type.
+      var typeName = _typeName(type.types[i]);
+      // Propogate undefined type names by returning early. Otherwise just add the
+      // type name to our array.
+      if (typeof typeName === 'undefined') {
+        return;
+      } else {
+        typeNames.push(typeName);
+      }
+    }
+    // Join all of the types together.
+    return typeNames.join(' | ');
   } else if (type.type === 'reference') {
 
     // check to see if the reference type is a simple type alias

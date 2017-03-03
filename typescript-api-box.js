@@ -243,9 +243,9 @@ function _type(data, skipSignature) {
 
   var typeName = _typeName(type);
   if (!typeName) {
-    console.error("unknown type name for", data.name);
+    console.error("unknown type name for", data.name, "using the type name `any`");
     // console.trace();
-    typeName = 'XXXX: unknown';
+    typeName = 'any';
   }
 
   if (type.typeArguments) {

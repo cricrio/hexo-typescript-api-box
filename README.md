@@ -1,5 +1,7 @@
 # Typescript API box
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/apollographql/hexo-typescript-api-box.svg)](https://greenkeeper.io/)
+
 ## Installation
 
 Add this package to your hexo site:

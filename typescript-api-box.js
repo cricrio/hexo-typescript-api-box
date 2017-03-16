@@ -263,7 +263,7 @@ function _typeName(type) {
     return type.name;
   } else if (type.type === 'union') {
     var typeNames = [];
-    for (let i = 0; i < type.types.length; i++) {
+    for (var i = 0; i < type.types.length; i++) {
       // Try to get the type name for this type.
       var typeName = _typeName(type.types[i]);
       // Propogate undefined type names by returning early. Otherwise just add the
